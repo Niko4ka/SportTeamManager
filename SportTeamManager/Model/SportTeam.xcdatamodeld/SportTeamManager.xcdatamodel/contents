@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14460.32" systemVersion="18B75" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="Player" representedClassName="Player" syncable="YES" codeGenerationType="class">
+        <attribute name="age" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="fullname" attributeType="String" defaultValueString="fullname" syncable="YES"/>
+        <attribute name="image" attributeType="Transformable" syncable="YES"/>
+        <attribute name="inPlay" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="nationality" attributeType="String" defaultValueString="Unknown" syncable="YES"/>
+        <attribute name="number" attributeType="String" defaultValueString="--" syncable="YES"/>
+        <attribute name="position" attributeType="String" defaultValueString="teamplayer" syncable="YES"/>
+        <attribute name="team" attributeType="String" defaultValueString="Team" syncable="YES"/>
+        <relationship name="teamRelations" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Team" inverseName="player" inverseEntity="Team" syncable="YES"/>
+    </entity>
+    <entity name="Team" representedClassName="Team" syncable="YES" codeGenerationType="class">
+        <attribute name="name" attributeType="String" syncable="YES"/>
+        <relationship name="player" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Player" inverseName="teamRelations" inverseEntity="Player" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="Player" positionX="-63" positionY="-18" width="128" height="180"/>
+        <element name="Team" positionX="276.42578125" positionY="1.58203125" width="128" height="75"/>
+    </elements>
+</model>
