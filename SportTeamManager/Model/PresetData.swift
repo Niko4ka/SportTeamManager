@@ -57,7 +57,7 @@ struct PresetData {
                 playerEntity.id = UUID()
                 playerEntity.fullname = player["fullname"]
                 playerEntity.position = player["position"]
-                playerEntity.team = player["team"]
+                playerEntity.team = teamEntity
                 
                 if player["inPlay"] != nil {
                     playerEntity.inPlay = true

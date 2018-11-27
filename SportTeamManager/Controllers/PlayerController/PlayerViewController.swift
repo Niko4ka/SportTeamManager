@@ -76,7 +76,7 @@ class PlayerViewController: UIViewController {
         nameTextField.text = player.fullname
         nationalityTextField.text = player.nationality
         ageTextField.text = player.age
-        selectTeamButton.setTitle(player.team, for: .normal)
+        selectTeamButton.setTitle(player.team.name, for: .normal)
         selectedTeam = selectTeamButton.title(for: .normal)
         selectPositionButton.setTitle(player.position, for: .normal)
         selectedPosition = selectPositionButton.title(for: .normal)
@@ -158,7 +158,7 @@ class PlayerViewController: UIViewController {
         player.age = playerAge
         player.fullname = nameTextField.text
         player.position = selectedPosition
-        player.team = selectedTeam
+        player.team = team
         player.image = photoImageView.image
         
         switch segmentedControl.selectedSegmentIndex {

@@ -9,15 +9,14 @@
         <attribute name="nationality" attributeType="String" defaultValueString="Unknown" syncable="YES"/>
         <attribute name="number" attributeType="String" defaultValueString="--" syncable="YES"/>
         <attribute name="position" attributeType="String" defaultValueString="teamplayer" syncable="YES"/>
-        <attribute name="team" attributeType="String" defaultValueString="Team" syncable="YES"/>
-        <relationship name="teamRelations" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Team" inverseName="player" inverseEntity="Team" syncable="YES"/>
+        <relationship name="team" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Team" inverseName="player" inverseEntity="Team" syncable="YES"/>
     </entity>
     <entity name="Team" representedClassName="Team" syncable="YES" codeGenerationType="class">
         <attribute name="name" attributeType="String" syncable="YES"/>
-        <relationship name="player" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Player" inverseName="teamRelations" inverseEntity="Player" syncable="YES"/>
+        <relationship name="player" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Player" inverseName="team" inverseEntity="Player" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Player" positionX="-63" positionY="-18" width="128" height="195"/>
+        <element name="Player" positionX="-63" positionY="-18" width="128" height="180"/>
         <element name="Team" positionX="276.42578125" positionY="1.58203125" width="128" height="75"/>
     </elements>
 </model>

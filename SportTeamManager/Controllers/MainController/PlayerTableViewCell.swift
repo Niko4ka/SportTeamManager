@@ -31,7 +31,7 @@ class PlayerTableViewCell: UITableViewCell {
         playerNumberLabel.text = player.number
         playerFullnameLabel.text = player.fullname
         playerPhotoImageView.image = player.image as? UIImage
-        teamLabel.text = player.team
+        teamLabel.text = player.team?.name
         nationalityLabel.text = player.nationality
         positionLabel.text = player.position
         ageLabel.text = "\(player.age)"

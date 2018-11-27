@@ -16,11 +16,11 @@ struct EditingPlayer {
     var fullname: String
     var nationality: String
     var age: String
-    var team: String
+    var team: Team
     var position: String
     var inPlay: Bool
     
-    init(playerID: UUID, playerNumber: String, playerPhoto: UIImage, playerFullname: String, playerNationality: String, playerAge: Int16, playerTeam: String, playerPosition: String, playerInPlay: Bool) {
+    init(playerID: UUID, playerNumber: String, playerPhoto: UIImage, playerFullname: String, playerNationality: String, playerAge: Int16, playerTeam: Team, playerPosition: String, playerInPlay: Bool) {
         
         self.id = playerID
         self.number = playerNumber

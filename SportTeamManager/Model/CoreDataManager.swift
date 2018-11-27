@@ -57,13 +57,11 @@ final class CoreDataManager {
         save(context: context)
     }
     
-    public func fetchData<T: NSManagedObject>(for entity: T.Type, predicate: NSCompoundPredicate? = nil) -> [T] {
+    public func fetchDataWithController<T: NSManagedObject>(for entity: T.Type, sectionNameKeyPath: String? = nil, predicate: NSCompoundPredicate? = nil) -> NSFetchedResultsController<T>{
         
         let context = getContext()
-        
         let request: NSFetchRequest<T>
-        var fetchedResult = [T]()
-        
+
         if #available(iOS 10.0, *) {
             request = entity.fetchRequest() as! NSFetchRequest<T>
         } else {
@@ -71,18 +69,21 @@ final class CoreDataManager {
             request = NSFetchRequest(entityName: entityName)
         }
         
-        let priceSortDescriptor = NSSortDescriptor(key: "fullname", ascending: true, selector: #selector(NSString.localizedStandardCompare(_:)))
+        let positionSortDescriptor = NSSortDescriptor(key: "position", ascending: true)
+        let nameSortDescriptor = NSSortDescriptor(key: "fullname", ascending: true, selector: #selector(NSString.localizedStandardCompare(_:)))
         
         request.predicate = predicate
-        request.sortDescriptors = [priceSortDescriptor]
+        request.sortDescriptors = [positionSortDescriptor, nameSortDescriptor]
+        
+        let controller = NSFetchedResultsController(fetchRequest: request, managedObjectContext: context, sectionNameKeyPath: sectionNameKeyPath, cacheName: nil)
         
         do {
-            fetchedResult = try context.fetch(request)
+            try controller.performFetch()
         } catch {
             debugPrint("Couldn't fetch \(error.localizedDescription)")
         }
         
-        return fetchedResult
+        return controller
     }
     
     public func findPlayer(withID id: UUID) -> [Player] {
