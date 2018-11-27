@@ -18,7 +18,7 @@ class PlayerTableViewCell: UITableViewCell {
     @IBOutlet weak var positionLabel: UILabel!
     @IBOutlet weak var ageLabel: UILabel!
     @IBOutlet weak var inPlayLabel: UILabel!
-    
+    public var id: UUID!
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -26,7 +26,8 @@ class PlayerTableViewCell: UITableViewCell {
     }
 
     func configureCell(with player: Player) {
-        
+
+        id = player.id
         playerNumberLabel.text = player.number
         playerFullnameLabel.text = player.fullname
         playerPhotoImageView.image = player.image as? UIImage

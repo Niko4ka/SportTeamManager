@@ -22,6 +22,7 @@
 		4ED0283221AAF2C600094EAF /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED0283021AAF2C600094EAF /* SearchViewController.swift */; };
 		4ED0283321AAF2C600094EAF /* SearchViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4ED0283121AAF2C600094EAF /* SearchViewController.xib */; };
 		4ED0283521AAF97C00094EAF /* RoundedCornerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED0283421AAF97C00094EAF /* RoundedCornerView.swift */; };
+		4ED0283721ADCBED00094EAF /* EditingPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED0283621ADCBED00094EAF /* EditingPlayer.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -39,9 +40,10 @@
 		4ED0282621A33E7500094EAF /* PlayerTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerTableViewCell.swift; sourceTree = "<group>"; };
 		4ED0282C21A4A86400094EAF /* PresetData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresetData.swift; sourceTree = "<group>"; };
 		4ED0282E21A6EE4A00094EAF /* KeyboardService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardService.swift; sourceTree = "<group>"; };
-		4ED0283021AAF2C600094EAF /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SearchViewController.swift; path = SportTeamManager/Controllers/SearchViewController.swift; sourceTree = SOURCE_ROOT; };
-		4ED0283121AAF2C600094EAF /* SearchViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = SearchViewController.xib; path = SportTeamManager/Controllers/SearchViewController.xib; sourceTree = SOURCE_ROOT; };
+		4ED0283021AAF2C600094EAF /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SearchViewController.swift; path = SportTeamManager/Controllers/SearchController/SearchViewController.swift; sourceTree = SOURCE_ROOT; };
+		4ED0283121AAF2C600094EAF /* SearchViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = SearchViewController.xib; path = SportTeamManager/Controllers/SearchController/SearchViewController.xib; sourceTree = SOURCE_ROOT; };
 		4ED0283421AAF97C00094EAF /* RoundedCornerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedCornerView.swift; sourceTree = "<group>"; };
+		4ED0283621ADCBED00094EAF /* EditingPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditingPlayer.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -75,11 +77,12 @@
 			isa = PBXGroup;
 			children = (
 				4ED0283421AAF97C00094EAF /* RoundedCornerView.swift */,
-				4ED0280921A328C700094EAF /* AppDelegate.swift */,
 				4ED0282E21A6EE4A00094EAF /* KeyboardService.swift */,
+				4ED0283621ADCBED00094EAF /* EditingPlayer.swift */,
 				4ED0281E21A32A2100094EAF /* Model */,
 				4ED0282121A334E600094EAF /* Controllers */,
 				4ED0281321A328C800094EAF /* Assets.xcassets */,
+				4ED0280921A328C700094EAF /* AppDelegate.swift */,
 				4ED0281521A328C800094EAF /* LaunchScreen.storyboard */,
 				4ED0281821A328C800094EAF /* Info.plist */,
 			);
@@ -99,15 +102,39 @@
 		4ED0282121A334E600094EAF /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				4ED0283821ADDB3300094EAF /* MainController */,
+				4ED0283921ADDB4400094EAF /* PlayerController */,
+				4ED0283A21ADDB5800094EAF /* SearchController */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		4ED0283821ADDB3300094EAF /* MainController */ = {
+			isa = PBXGroup;
+			children = (
 				4ED0280B21A328C700094EAF /* MainViewController.swift */,
-				4ED0282621A33E7500094EAF /* PlayerTableViewCell.swift */,
 				4ED0280D21A328C700094EAF /* MainViewController.storyboard */,
+				4ED0282621A33E7500094EAF /* PlayerTableViewCell.swift */,
+			);
+			path = MainController;
+			sourceTree = "<group>";
+		};
+		4ED0283921ADDB4400094EAF /* PlayerController */ = {
+			isa = PBXGroup;
+			children = (
 				4ED0282221A338B100094EAF /* PlayerViewController.swift */,
 				4ED0282421A338E900094EAF /* PlayerViewController.storyboard */,
+			);
+			path = PlayerController;
+			sourceTree = "<group>";
+		};
+		4ED0283A21ADDB5800094EAF /* SearchController */ = {
+			isa = PBXGroup;
+			children = (
 				4ED0283021AAF2C600094EAF /* SearchViewController.swift */,
 				4ED0283121AAF2C600094EAF /* SearchViewController.xib */,
 			);
-			path = Controllers;
+			path = SearchController;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -183,6 +210,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4ED0283721ADCBED00094EAF /* EditingPlayer.swift in Sources */,
 				4ED0282721A33E7500094EAF /* PlayerTableViewCell.swift in Sources */,
 				4ED0280C21A328C700094EAF /* MainViewController.swift in Sources */,
 				4ED0282F21A6EE4A00094EAF /* KeyboardService.swift in Sources */,

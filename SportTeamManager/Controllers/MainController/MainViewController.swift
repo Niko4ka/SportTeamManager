@@ -11,7 +11,6 @@ import CoreData
 
 class MainViewController: UIViewController {
     
-    
     @IBOutlet weak var playersTableView: UITableView!
     @IBOutlet weak var noResultsLabel: UILabel!
     @IBOutlet weak var noResultsAdditionalLabel: UILabel!
@@ -20,6 +19,7 @@ class MainViewController: UIViewController {
     
     private var players = [Player]()
     private let emptyPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [])
+    private var playerShouldBeInPlay: Bool!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -117,7 +117,56 @@ extension MainViewController: UITableViewDelegate {
             self.fetchData()
             tableView.deleteRows(at: [indexPath], with: .fade)
         }
-        return [delete]
+        
+        let cell = tableView.cellForRow(at: indexPath) as! PlayerTableViewCell
+        let inPlayStatusTitle = changePlayStatus(from: cell.inPlayLabel.text!)
+        
+        let inPlayStatus = UITableViewRowAction(style: .normal, title: inPlayStatusTitle) { (action, indexPath) in
+            
+            let context = CoreDataManager.instance.getContext()
+            let selectedPlayer = CoreDataManager.instance.findPlayer(withID: cell.id).first
+            selectedPlayer?.inPlay = self.playerShouldBeInPlay
+            CoreDataManager.instance.save(context: context)
+            tableView.reloadRows(at: [indexPath], with: .fade)
+        }
+        inPlayStatus.backgroundColor = UIColor.purple
+        
+        let edit = UITableViewRowAction(style: .normal, title: "Edit") { (action, indexPath) in
+            
+            guard let selectedPlayer = CoreDataManager.instance.findPlayer(withID: cell.id).first,
+                let number = selectedPlayer.number,
+                let photo = selectedPlayer.image as? UIImage,
+                let fullname = selectedPlayer.fullname,
+                let nationality = selectedPlayer.nationality,
+                let team = selectedPlayer.team,
+                let position = selectedPlayer.position else {
+                print("Problems with finding player")
+                return
+            }
+            
+            let editingPlayer = EditingPlayer(playerID: cell.id, playerNumber: number, playerPhoto: photo, playerFullname: fullname, playerNationality: nationality, playerAge: selectedPlayer.age, playerTeam: team, playerPosition: position, playerInPlay: selectedPlayer.inPlay)
+            
+            let storyboard = UIStoryboard(name: "PlayerViewController", bundle: nil)
+            let playerViewController = storyboard.instantiateViewController(withIdentifier: "PlayerViewController") as! PlayerViewController
+            playerViewController.editingPlayer = editingPlayer
+            self.navigationController?.pushViewController(playerViewController, animated: true)
+        }
+        edit.backgroundColor = UIColor.orange
+        
+        return [delete, edit, inPlayStatus]
+    }
+    
+    private func changePlayStatus(from currentStatus: String) -> String {
+        switch currentStatus {
+        case "In Play":
+            playerShouldBeInPlay = false
+            return "To Bench"
+        case "On Bench":
+            playerShouldBeInPlay = true
+            return "To Play"
+        default:
+            return "Unknown"
+        }
     }
     
 }

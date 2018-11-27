@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  CoreDataManager.swift
 //  SportTeamManager
 //
 //  Created by Вероника Данилова on 19/11/2018.
@@ -42,7 +42,6 @@ final class CoreDataManager {
                 let error = error as NSError
                 fatalError("Unresolved error - \(error), \(error.userInfo)")
             }
-            
         }
     }
     
@@ -76,6 +75,33 @@ final class CoreDataManager {
         
         request.predicate = predicate
         request.sortDescriptors = [priceSortDescriptor]
+        
+        do {
+            fetchedResult = try context.fetch(request)
+        } catch {
+            debugPrint("Couldn't fetch \(error.localizedDescription)")
+        }
+        
+        return fetchedResult
+    }
+    
+    public func findPlayer(withID id: UUID) -> [Player] {
+        
+        let context = getContext()
+        
+        let request: NSFetchRequest<Player>
+        var fetchedResult = [Player]()
+        
+        if #available(iOS 10.0, *) {
+            request = Player.fetchRequest()
+        } else {
+            let entityName = String(describing: Player.self)
+            request = NSFetchRequest(entityName: entityName)
+        }
+        
+        let predicate = NSPredicate(format: "id = '\(id)'")
+        print("Predicate - \(predicate)")
+        request.predicate = predicate
         
         do {
             fetchedResult = try context.fetch(request)

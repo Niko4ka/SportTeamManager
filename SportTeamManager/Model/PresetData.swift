@@ -54,6 +54,7 @@ struct PresetData {
                     playerEntity.number = player["number"]
                 }
                 
+                playerEntity.id = UUID()
                 playerEntity.fullname = player["fullname"]
                 playerEntity.position = player["position"]
                 playerEntity.team = player["team"]

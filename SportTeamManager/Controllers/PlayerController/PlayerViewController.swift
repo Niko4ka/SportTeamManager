@@ -28,11 +28,13 @@ class PlayerViewController: UIViewController {
     
 
     private var imagePickerController = UIImagePickerController()
-    private var selectedTeam: String!
-    private var selectedPosition: String!
     private var keyboardService: KeyboardService!
     private let hiddenTextField = UITextField(frame: .zero)
     private let pickerView = UIPickerView()
+    private var selectedTeam: String!
+    private var selectedPosition: String!
+    
+    public var editingPlayer: EditingPlayer?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -64,6 +66,30 @@ class PlayerViewController: UIViewController {
         photoImageView.layer.borderColor = UIColor.lightGray.cgColor
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        guard let player = editingPlayer else { return }
+        
+        photoImageView.image = player.photo
+        numberTextField.text = player.number
+        nameTextField.text = player.fullname
+        nationalityTextField.text = player.nationality
+        ageTextField.text = player.age
+        selectTeamButton.setTitle(player.team, for: .normal)
+        selectedTeam = selectTeamButton.title(for: .normal)
+        selectPositionButton.setTitle(player.position, for: .normal)
+        selectedPosition = selectPositionButton.title(for: .normal)
+        
+        if player.inPlay {
+            segmentedControl.selectedSegmentIndex = 0
+        } else {
+            segmentedControl.selectedSegmentIndex = 1
+        }
+        
+        enableSaveButton()
+    }
+    
     @IBAction func uploadImageButtonPressed(_ sender: UIButton) {
         
         present(imagePickerController, animated: true, completion: nil)
@@ -72,6 +98,14 @@ class PlayerViewController: UIViewController {
     @IBAction func teamSelectButtonPressed(_ sender: UIButton) {
         
         pickerView.tag = 0
+        if selectedTeam != nil {
+            for i in 0..<PickerViewItems.teams.count {
+                if selectedTeam == PickerViewItems.teams[i] {
+                    pickerView.selectRow(i, inComponent: 0, animated: false)
+                    break
+                }
+            }
+        }
         hiddenTextField.frame.origin = CGPoint(x: selectTeamButton.frame.origin.x, y: selectTeamButton.frame.origin.y + 30.0)
         hiddenTextField.becomeFirstResponder()
     }
@@ -79,6 +113,14 @@ class PlayerViewController: UIViewController {
     @IBAction func positionSelectButtonPressed(_ sender: UIButton) {
         
         pickerView.tag = 1
+        if selectedPosition != nil {
+            for i in 0..<PickerViewItems.positions.count {
+                if selectedPosition == PickerViewItems.positions[i] {
+                    pickerView.selectRow(i, inComponent: 0, animated: false)
+                    break
+                }
+            }
+        }
         hiddenTextField.frame.origin = CGPoint(x: selectPositionButton.frame.origin.x, y: selectPositionButton.frame.origin.y + 30.0)
         hiddenTextField.becomeFirstResponder()
     }
@@ -96,8 +138,15 @@ class PlayerViewController: UIViewController {
         let team = CoreDataManager.instance.createObject(from: Team.self)
         team.name = selectedTeam
         
-        let player = CoreDataManager.instance.createObject(from: Player.self)
-
+        var player: Player!
+        
+        if editingPlayer == nil {
+            player = CoreDataManager.instance.createObject(from: Player.self)
+        } else {
+            guard let id = editingPlayer?.id else { return }
+            player = CoreDataManager.instance.findPlayer(withID: id).first
+        }
+        
         if nationalityTextField.text != "" {
             player.nationality = nationalityTextField.text
         }
@@ -105,6 +154,7 @@ class PlayerViewController: UIViewController {
             player.number = numberTextField.text
         }
         
+        player.id = UUID()
         player.age = playerAge
         player.fullname = nameTextField.text
         player.position = selectedPosition
