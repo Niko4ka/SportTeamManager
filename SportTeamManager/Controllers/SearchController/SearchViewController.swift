@@ -25,9 +25,15 @@ class SearchViewController: UIViewController {
     @IBOutlet weak var teamPickerView: UIPickerView!
     
     weak var delegate: SearchDelegate?
+    private var selectedSegmentIndex: Int = 0
     private var selectedTeam: String = ""
     private var selectedPosition: String = ""
-
+    
+    convenience init(segmentIndex: Int) {
+        self.init()
+        self.selectedSegmentIndex = segmentIndex
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         positionPickerView.isHidden = true
@@ -45,6 +51,8 @@ class SearchViewController: UIViewController {
         
         let closeTap = UITapGestureRecognizer(target: self, action: #selector(closeTapGesture(_:)))
         bgView.addGestureRecognizer(closeTap)
+        
+        print("Selected index - \(selectedSegmentIndex)")
     }
     
     @IBAction func selectPositionButtonPressed(_ sender: UIButton) {
@@ -66,7 +74,17 @@ class SearchViewController: UIViewController {
     }
     
     @IBAction func resetButtonPressed(_ sender: UIButton) {
-        delegate?.viewController(self, didPassedData: NSCompoundPredicate(andPredicateWithSubpredicates: []))
+        switch selectedSegmentIndex {
+        case 0:
+            delegate?.viewController(self, didPassedData: MainViewController.Predicates.emptyPredicate)
+        case 1:
+            delegate?.viewController(self, didPassedData: MainViewController.Predicates.inPlayPredicate)
+        case 2:
+            delegate?.viewController(self, didPassedData: MainViewController.Predicates.onBenchPredicate)
+        default:
+            return
+        }
+        
         dismiss(animated: true, completion: nil)
     }
     
@@ -94,6 +112,17 @@ class SearchViewController: UIViewController {
         if !team.isEmpty{
             let teamPredicate = NSPredicate(format: "team.name CONTAINS[cd] '\(team)'")
             predicates.append(teamPredicate)
+        }
+        
+        switch selectedSegmentIndex {
+        case 1:
+            let inPlayPredicate = NSPredicate(format: "inPlay = true")
+            predicates.append(inPlayPredicate)
+        case 2:
+            let onBenchPredicate = NSPredicate(format: "inPlay = false")
+            predicates.append(onBenchPredicate)
+        default:
+            break
         }
         
         return NSCompoundPredicate(andPredicateWithSubpredicates: predicates)

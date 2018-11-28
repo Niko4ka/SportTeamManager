@@ -17,9 +17,11 @@ class MainViewController: UIViewController {
     @IBOutlet weak var resetFiltersButton: UIButton!
     @IBOutlet weak var segmentedControl: UISegmentedControl!
     
-    private let emptyPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [])
-    private let inPlayPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [NSPredicate(format: "inPlay = true")])
-    private let onBenchPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [NSPredicate(format: "inPlay = false")])
+    struct Predicates {
+        static let emptyPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [])
+        static let inPlayPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [NSPredicate(format: "inPlay = true")])
+        static let onBenchPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [NSPredicate(format: "inPlay = false")])
+    }
     
     private var playerShouldBeInPlay: Bool!
     private var fetchedResultController: NSFetchedResultsController<Player>!
@@ -45,7 +47,7 @@ class MainViewController: UIViewController {
     }
     
     @IBAction func searchButtonPressed(_ sender: UIBarButtonItem) {
-        let searchViewController = SearchViewController()
+        let searchViewController = SearchViewController(segmentIndex: segmentedControl.selectedSegmentIndex)
         searchViewController.delegate = self
         searchViewController.modalTransitionStyle = .crossDissolve
         searchViewController.modalPresentationStyle = .overCurrentContext
@@ -57,13 +59,13 @@ class MainViewController: UIViewController {
         switch sender.selectedSegmentIndex {
         case 0:
             noResultsText = "Players catalog is empty"
-            fetchData(predicate: emptyPredicate)
+            fetchData(predicate: Predicates.emptyPredicate)
         case 1:
             noResultsText = "There are no players in play"
-            fetchData(predicate: inPlayPredicate)
+            fetchData(predicate: Predicates.inPlayPredicate)
         case 2:
             noResultsText = "There are no players on bench"
-            fetchData(predicate: onBenchPredicate)
+            fetchData(predicate: Predicates.onBenchPredicate)
         default:
             break
         }
@@ -93,7 +95,7 @@ class MainViewController: UIViewController {
             playersTableView.isHidden = false
         } else {
             playersTableView.isHidden = true
-            if predicate == nil || predicate == emptyPredicate || predicate == onBenchPredicate || predicate == inPlayPredicate {
+            if predicate == nil || predicate == Predicates.emptyPredicate || predicate == Predicates.onBenchPredicate || predicate == Predicates.inPlayPredicate {
                 noResultsLabel.text = noResultsText
                 noResultsAdditionalLabel.text = "Add a player by pressing +"
                 resetFiltersButton.isHidden = true
@@ -106,9 +108,17 @@ class MainViewController: UIViewController {
     }
     
     @IBAction func resetFiltersButtonPressed(_ sender: Any) {
-        viewController(self, didPassedData: NSCompoundPredicate(andPredicateWithSubpredicates: []))
+        switch segmentedControl.selectedSegmentIndex {
+        case 0:
+            viewController(self, didPassedData: Predicates.emptyPredicate)
+        case 1:
+            viewController(self, didPassedData: Predicates.inPlayPredicate)
+        case 2:
+            viewController(self, didPassedData: Predicates.onBenchPredicate)
+        default:
+            return
+        }
     }
-    
 
 }
 
@@ -207,15 +217,7 @@ extension MainViewController: UITableViewDataSource {
         if let cell = cell as? PlayerTableViewCell {
             
             let item = fetchedResultController.object(at: indexPath)
-            
             cell.configureCell(with: item)
-            
-//            if players.contains(item) {
-//                print("Item - \(item.fullname)")
-//
-//            }
-//
-//            cell.configureCell(with: players[indexPath.row])
         }
         return cell
     }
