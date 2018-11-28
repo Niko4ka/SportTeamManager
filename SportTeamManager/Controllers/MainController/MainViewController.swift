@@ -26,8 +26,9 @@ class MainViewController: UIViewController {
     }
     
     // Variables
-    var playerShouldBeInPlay: Bool!
+    
     var fetchedResultController: NSFetchedResultsController<Player>!
+    private var searchPredicate: NSCompoundPredicate?
     private var noResultsText = "Players catalog is empty"
 
     override func viewDidLoad() {
@@ -42,6 +43,12 @@ class MainViewController: UIViewController {
         fetchData()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        updateUI()
+        playersTableView.reloadData()
+    }
+    
     // MARK: - Actions
     
     @IBAction func addPlayerButtonPressed(_ sender: UIBarButtonItem) {
@@ -52,7 +59,7 @@ class MainViewController: UIViewController {
     }
     
     @IBAction func searchButtonPressed(_ sender: UIBarButtonItem) {
-        let searchViewController = SearchViewController(segmentIndex: segmentedControl.selectedSegmentIndex)
+        let searchViewController = SearchViewController()
         searchViewController.delegate = self
         searchViewController.modalTransitionStyle = .crossDissolve
         searchViewController.modalPresentationStyle = .overCurrentContext
@@ -64,38 +71,62 @@ class MainViewController: UIViewController {
         switch sender.selectedSegmentIndex {
         case 0:
             noResultsText = "Players catalog is empty"
-            fetchData(predicate: Predicates.emptyPredicate)
         case 1:
             noResultsText = "There are no players in play"
-            fetchData(predicate: Predicates.inPlayPredicate)
         case 2:
             noResultsText = "There are no players on bench"
-            fetchData(predicate: Predicates.onBenchPredicate)
         default:
             break
         }
         
+        updateUI()
         playersTableView.reloadData()
     }
     
     @IBAction func resetFiltersButtonPressed(_ sender: Any) {
-        switch segmentedControl.selectedSegmentIndex {
-        case 0:
-            viewController(self, didPassedData: Predicates.emptyPredicate)
-        case 1:
-            viewController(self, didPassedData: Predicates.inPlayPredicate)
-        case 2:
-            viewController(self, didPassedData: Predicates.onBenchPredicate)
-        default:
-            return
-        }
+        
+        viewController(self, didPassedData: Predicates.emptyPredicate)
     }
     
     // MARK: - Fetch data
     
+    private func updateUI() {
+        
+        switch (searchPredicate, segmentedControl.selectedSegmentIndex) {
+            
+        case (nil, 0):
+            fetchData()
+            
+        case (nil, 1):
+            fetchData(predicate: Predicates.inPlayPredicate)
+            
+        case (nil, 2):
+            fetchData(predicate: Predicates.onBenchPredicate)
+
+        case (let notNil, 0) where notNil != nil:
+            fetchData(predicate: searchPredicate)
+            
+        case (let notNil, 1) where notNil != nil:
+            if let searchPredicate = searchPredicate {
+                let combinedPredicate = NSCompoundPredicate(type: .and, subpredicates: [Predicates.inPlayPredicate, searchPredicate])
+                fetchData(predicate: combinedPredicate)
+            }
+            
+        case (let notNil, 2) where notNil != nil:
+            if let searchPredicate = searchPredicate {
+                let combinedPredicate = NSCompoundPredicate(type: .and, subpredicates: [Predicates.onBenchPredicate, searchPredicate])
+                fetchData(predicate: combinedPredicate)
+            }
+            
+        default:
+            return
+        }
+        
+    }
+    
     private func fetchData(predicate: NSCompoundPredicate? = nil) {
         
-        fetchedResultController = CoreDataManager.instance.fetchDataWithController(for: Player.self, sectionNameKeyPath: "position", predicate: predicate)
+        fetchedResultController = CoreDataManager.instance.fetchDataWithController(for: Player.self, sectionNameKeyPath: "team.name", predicate: predicate)
         fetchedResultController.delegate = self
         
         fetchedObjectsCheck(predicate: predicate)
@@ -186,7 +217,14 @@ extension MainViewController: NSFetchedResultsControllerDelegate {
 
 extension MainViewController: SearchDelegate {
     func viewController(_ viewController: UIViewController, didPassedData predicate: NSCompoundPredicate) {
-        fetchData(predicate: predicate)
+        
+        if predicate == Predicates.emptyPredicate {
+            searchPredicate = nil
+        } else {
+            searchPredicate = predicate
+        }
+        
+        updateUI()
         playersTableView.reloadData()
     }
 }

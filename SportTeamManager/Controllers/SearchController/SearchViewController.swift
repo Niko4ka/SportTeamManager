@@ -24,14 +24,8 @@ class SearchViewController: UIViewController {
     @IBOutlet weak var teamPickerView: UIPickerView!
     // Variables
     weak var delegate: SearchDelegate?
-    private var selectedSegmentIndex: Int = 0
     private var selectedTeam: String = ""
     private var selectedPosition: String = ""
-    
-    convenience init(segmentIndex: Int) {
-        self.init()
-        self.selectedSegmentIndex = segmentIndex
-    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -76,16 +70,8 @@ class SearchViewController: UIViewController {
     }
     
     @IBAction func resetButtonPressed(_ sender: UIButton) {
-        switch selectedSegmentIndex {
-        case 0:
-            delegate?.viewController(self, didPassedData: MainViewController.Predicates.emptyPredicate)
-        case 1:
-            delegate?.viewController(self, didPassedData: MainViewController.Predicates.inPlayPredicate)
-        case 2:
-            delegate?.viewController(self, didPassedData: MainViewController.Predicates.onBenchPredicate)
-        default:
-            return
-        }
+
+        delegate?.viewController(self, didPassedData: MainViewController.Predicates.emptyPredicate)
         
         dismiss(animated: true, completion: nil)
     }
@@ -116,18 +102,7 @@ class SearchViewController: UIViewController {
             let teamPredicate = NSPredicate(format: "team.name CONTAINS[cd] '\(team)'")
             predicates.append(teamPredicate)
         }
-        
-        switch selectedSegmentIndex {
-        case 1:
-            let inPlayPredicate = NSPredicate(format: "inPlay = true")
-            predicates.append(inPlayPredicate)
-        case 2:
-            let onBenchPredicate = NSPredicate(format: "inPlay = false")
-            predicates.append(onBenchPredicate)
-        default:
-            break
-        }
-        
+
         return NSCompoundPredicate(andPredicateWithSubpredicates: predicates)
     }
     

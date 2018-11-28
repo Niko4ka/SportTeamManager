@@ -69,7 +69,7 @@ final class CoreDataManager {
             request = NSFetchRequest(entityName: entityName)
         }
         
-        let positionSortDescriptor = NSSortDescriptor(key: "position", ascending: true)
+        let positionSortDescriptor = NSSortDescriptor(key: "team.name", ascending: true)
         let nameSortDescriptor = NSSortDescriptor(key: "fullname", ascending: true, selector: #selector(NSString.localizedStandardCompare(_:)))
         
         request.predicate = predicate

@@ -22,7 +22,6 @@
 		4ED0283221AAF2C600094EAF /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED0283021AAF2C600094EAF /* SearchViewController.swift */; };
 		4ED0283321AAF2C600094EAF /* SearchViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4ED0283121AAF2C600094EAF /* SearchViewController.xib */; };
 		4ED0283521AAF97C00094EAF /* RoundedCornerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED0283421AAF97C00094EAF /* RoundedCornerView.swift */; };
-		4ED0283721ADCBED00094EAF /* EditingPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED0283621ADCBED00094EAF /* EditingPlayer.swift */; };
 		4ED0284021AE25E600094EAF /* MainViewController+TableViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED0283F21AE25E600094EAF /* MainViewController+TableViewDelegate.swift */; };
 		4ED0284221AE27AD00094EAF /* MainViewController+TableViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED0284121AE27AD00094EAF /* MainViewController+TableViewDataSource.swift */; };
 		4ED0284421AEACE200094EAF /* PlayerViewController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED0284321AEACE200094EAF /* PlayerViewController+Extensions.swift */; };
@@ -46,7 +45,6 @@
 		4ED0283021AAF2C600094EAF /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SearchViewController.swift; path = SportTeamManager/Controllers/SearchController/SearchViewController.swift; sourceTree = SOURCE_ROOT; };
 		4ED0283121AAF2C600094EAF /* SearchViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = SearchViewController.xib; path = SportTeamManager/Controllers/SearchController/SearchViewController.xib; sourceTree = SOURCE_ROOT; };
 		4ED0283421AAF97C00094EAF /* RoundedCornerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedCornerView.swift; sourceTree = "<group>"; };
-		4ED0283621ADCBED00094EAF /* EditingPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditingPlayer.swift; sourceTree = "<group>"; };
 		4ED0283F21AE25E600094EAF /* MainViewController+TableViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MainViewController+TableViewDelegate.swift"; sourceTree = "<group>"; };
 		4ED0284121AE27AD00094EAF /* MainViewController+TableViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MainViewController+TableViewDataSource.swift"; sourceTree = "<group>"; };
 		4ED0284321AEACE200094EAF /* PlayerViewController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PlayerViewController+Extensions.swift"; sourceTree = "<group>"; };
@@ -84,7 +82,6 @@
 			children = (
 				4ED0283421AAF97C00094EAF /* RoundedCornerView.swift */,
 				4ED0282E21A6EE4A00094EAF /* KeyboardService.swift */,
-				4ED0283621ADCBED00094EAF /* EditingPlayer.swift */,
 				4ED0281E21A32A2100094EAF /* Model */,
 				4ED0282121A334E600094EAF /* Controllers */,
 				4ED0281321A328C800094EAF /* Assets.xcassets */,
@@ -219,7 +216,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4ED0283721ADCBED00094EAF /* EditingPlayer.swift in Sources */,
 				4ED0282721A33E7500094EAF /* PlayerTableViewCell.swift in Sources */,
 				4ED0280C21A328C700094EAF /* MainViewController.swift in Sources */,
 				4ED0282F21A6EE4A00094EAF /* KeyboardService.swift in Sources */,

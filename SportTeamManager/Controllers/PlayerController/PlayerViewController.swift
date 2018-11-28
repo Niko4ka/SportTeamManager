@@ -35,7 +35,7 @@ class PlayerViewController: UIViewController {
     let pickerView = UIPickerView()
     var selectedTeam: String!
     var selectedPosition: String!
-    public var editingPlayer: EditingPlayer?
+    public var editingPlayer: Player?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -72,12 +72,14 @@ class PlayerViewController: UIViewController {
         
         guard let player = editingPlayer else { return }
         
-        photoImageView.image = player.photo
+        photoImageView.image = player.image as? UIImage
         numberTextField.text = player.number
         nameTextField.text = player.fullname
         nationalityTextField.text = player.nationality
-        ageTextField.text = player.age
-        selectTeamButton.setTitle(player.team.name, for: .normal)
+        ageTextField.text = "\(player.age)"
+        if let team = player.team {
+            selectTeamButton.setTitle(team.name, for: .normal)
+        }
         selectedTeam = selectTeamButton.title(for: .normal)
         selectPositionButton.setTitle(player.position, for: .normal)
         selectedPosition = selectPositionButton.title(for: .normal)
