@@ -8,13 +8,12 @@
 
 import UIKit
 
-
 protocol SearchDelegate: class {
     func viewController(_ viewController: UIViewController, didPassedData predicate: NSCompoundPredicate)
 }
 
 class SearchViewController: UIViewController {
-    
+    // Outlets
     @IBOutlet weak var bgView: UIView!
     @IBOutlet weak var fullnameTextField: UITextField!
     @IBOutlet weak var ageTextField: UITextField!
@@ -23,7 +22,7 @@ class SearchViewController: UIViewController {
     @IBOutlet weak var selectTeamButton: UIButton!
     @IBOutlet weak var positionPickerView: UIPickerView!
     @IBOutlet weak var teamPickerView: UIPickerView!
-    
+    // Variables
     weak var delegate: SearchDelegate?
     private var selectedSegmentIndex: Int = 0
     private var selectedTeam: String = ""
@@ -51,9 +50,13 @@ class SearchViewController: UIViewController {
         
         let closeTap = UITapGestureRecognizer(target: self, action: #selector(closeTapGesture(_:)))
         bgView.addGestureRecognizer(closeTap)
-        
-        print("Selected index - \(selectedSegmentIndex)")
     }
+    
+    @objc func closeTapGesture(_ recognizer: UITapGestureRecognizer) {
+        dismiss(animated: true, completion: nil)
+    }
+    
+    // MARK: - Actions
     
     @IBAction func selectPositionButtonPressed(_ sender: UIButton) {
         positionPickerView.isHidden = false
@@ -64,7 +67,6 @@ class SearchViewController: UIViewController {
         positionPickerView.isHidden = true
         teamPickerView.isHidden = false
     }
-    
     
     @IBAction func startSearchButtonPressed(_ sender: UIButton) {
         
@@ -88,6 +90,8 @@ class SearchViewController: UIViewController {
         dismiss(animated: true, completion: nil)
     }
     
+    // MARK: - Private
+    
     private func makeCompoundPredicate(fullname: String, age: String, position: String, team: String) -> NSCompoundPredicate {
         
         var predicates = [NSPredicate]()
@@ -98,7 +102,6 @@ class SearchViewController: UIViewController {
         }
         
         if !age.isEmpty {
-            
             let selectedSegmentControl = ageSearchCondition(index: ageSegmentedControl.selectedSegmentIndex)
             let agePredicate = NSPredicate(format: "age \(selectedSegmentControl) '\(age)'")
             predicates.append(agePredicate)
@@ -143,13 +146,11 @@ class SearchViewController: UIViewController {
         }
         
         return condition
-        
     }
 
-    @objc func closeTapGesture(_ recognizer: UITapGestureRecognizer) {
-        dismiss(animated: true, completion: nil)
-    }
 }
+
+// MARK: - UIPickerViewDelegate, UIPickerViewDataSource
 
 extension SearchViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     
@@ -167,7 +168,6 @@ extension SearchViewController: UIPickerViewDelegate, UIPickerViewDataSource {
         default:
             ()
         }
-        
     }
     
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
@@ -199,6 +199,8 @@ extension SearchViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     }
     
 }
+
+// MARK: - UITextFieldDelegate
 
 extension SearchViewController: UITextFieldDelegate {
     

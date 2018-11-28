@@ -11,20 +11,23 @@ import CoreData
 
 class MainViewController: UIViewController {
     
+    // Outlets
     @IBOutlet weak var playersTableView: UITableView!
     @IBOutlet weak var noResultsLabel: UILabel!
     @IBOutlet weak var noResultsAdditionalLabel: UILabel!
     @IBOutlet weak var resetFiltersButton: UIButton!
     @IBOutlet weak var segmentedControl: UISegmentedControl!
     
+    // Predicates
     struct Predicates {
         static let emptyPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [])
         static let inPlayPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [NSPredicate(format: "inPlay = true")])
         static let onBenchPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [NSPredicate(format: "inPlay = false")])
     }
     
-    private var playerShouldBeInPlay: Bool!
-    private var fetchedResultController: NSFetchedResultsController<Player>!
+    // Variables
+    var playerShouldBeInPlay: Bool!
+    var fetchedResultController: NSFetchedResultsController<Player>!
     private var noResultsText = "Players catalog is empty"
 
     override func viewDidLoad() {
@@ -38,6 +41,8 @@ class MainViewController: UIViewController {
         
         fetchData()
     }
+    
+    // MARK: - Actions
     
     @IBAction func addPlayerButtonPressed(_ sender: UIBarButtonItem) {
         
@@ -73,6 +78,20 @@ class MainViewController: UIViewController {
         playersTableView.reloadData()
     }
     
+    @IBAction func resetFiltersButtonPressed(_ sender: Any) {
+        switch segmentedControl.selectedSegmentIndex {
+        case 0:
+            viewController(self, didPassedData: Predicates.emptyPredicate)
+        case 1:
+            viewController(self, didPassedData: Predicates.inPlayPredicate)
+        case 2:
+            viewController(self, didPassedData: Predicates.onBenchPredicate)
+        default:
+            return
+        }
+    }
+    
+    // MARK: - Fetch data
     
     private func fetchData(predicate: NSCompoundPredicate? = nil) {
         
@@ -88,9 +107,6 @@ class MainViewController: UIViewController {
             return
         }
         
-        print("Number of objects - \(objects.count)")
-
-
         if objects.count > 0 {
             playersTableView.isHidden = false
         } else {
@@ -106,123 +122,10 @@ class MainViewController: UIViewController {
             }
         }
     }
-    
-    @IBAction func resetFiltersButtonPressed(_ sender: Any) {
-        switch segmentedControl.selectedSegmentIndex {
-        case 0:
-            viewController(self, didPassedData: Predicates.emptyPredicate)
-        case 1:
-            viewController(self, didPassedData: Predicates.inPlayPredicate)
-        case 2:
-            viewController(self, didPassedData: Predicates.onBenchPredicate)
-        default:
-            return
-        }
-    }
 
 }
 
-extension MainViewController: UITableViewDelegate {
-    
-    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
-        
-        let delete = UITableViewRowAction(style: .destructive, title: "Delete") { (action, indexPath) in
-            
-            let item = self.fetchedResultController.object(at: indexPath)
-            CoreDataManager.instance.delete(object: item)
-        }
-        
-        var inPlayStatusTitle: String
-        let cell = tableView.cellForRow(at: indexPath) as! PlayerTableViewCell
-        
-        switch cell.inPlayLabel.text {
-        case "In Play":
-            playerShouldBeInPlay = false
-            inPlayStatusTitle = "To Bench"
-        case "On Bench":
-            playerShouldBeInPlay = true
-            inPlayStatusTitle = "To Play"
-        default:
-            playerShouldBeInPlay = false
-            inPlayStatusTitle = "Unknown"
-        }
-        
-        let inPlayStatus = UITableViewRowAction(style: .normal, title: inPlayStatusTitle) { (action, indexPath) in
-            
-            let context = CoreDataManager.instance.getContext()
-            let selectedPlayer = CoreDataManager.instance.findPlayer(withID: cell.id).first
-            selectedPlayer?.inPlay = self.playerShouldBeInPlay
-            CoreDataManager.instance.save(context: context)
-        }
-        inPlayStatus.backgroundColor = UIColor.purple
-        
-        let edit = UITableViewRowAction(style: .normal, title: "Edit") { (action, indexPath) in
-            
-            guard let selectedPlayer = CoreDataManager.instance.findPlayer(withID: cell.id).first,
-                let number = selectedPlayer.number,
-                let photo = selectedPlayer.image as? UIImage,
-                let fullname = selectedPlayer.fullname,
-                let nationality = selectedPlayer.nationality,
-                let team = selectedPlayer.team,
-                let position = selectedPlayer.position else {
-                print("Problems with finding player")
-                return
-            }
-            
-            let editingPlayer = EditingPlayer(playerID: cell.id, playerNumber: number, playerPhoto: photo, playerFullname: fullname, playerNationality: nationality, playerAge: selectedPlayer.age, playerTeam: team, playerPosition: position, playerInPlay: selectedPlayer.inPlay)
-            
-            let storyboard = UIStoryboard(name: "PlayerViewController", bundle: nil)
-            let playerViewController = storyboard.instantiateViewController(withIdentifier: "PlayerViewController") as! PlayerViewController
-            playerViewController.editingPlayer = editingPlayer
-            self.navigationController?.pushViewController(playerViewController, animated: true)
-        }
-        edit.backgroundColor = UIColor.orange
-        
-        return [delete, edit, inPlayStatus]
-    }
-    
-}
-
-
-extension MainViewController: UITableViewDataSource {
-    
-    func numberOfSections(in tableView: UITableView) -> Int {
-        guard let sections = fetchedResultController.sections else {
-            return 0
-        }
-        
-        return sections.count
-    }
-    
-    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        guard let sections = fetchedResultController.sections else {
-            return nil
-        }
-        
-        return sections[section].name
-    }
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
-        guard let sections = fetchedResultController.sections else {
-            return 0
-        }
-        
-        return sections[section].numberOfObjects
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        let cell = tableView.dequeueReusableCell(withIdentifier: "playerCell", for: indexPath)
-        if let cell = cell as? PlayerTableViewCell {
-            
-            let item = fetchedResultController.object(at: indexPath)
-            cell.configureCell(with: item)
-        }
-        return cell
-    }
-    
-}
+// MARK: - NSFetchedResultsControllerDelegate
 
 extension MainViewController: NSFetchedResultsControllerDelegate {
     
@@ -265,7 +168,6 @@ extension MainViewController: NSFetchedResultsControllerDelegate {
             }
             
         case .update:
-            print("Update")
             if let indexPath = indexPath {
                 let cell = playersTableView.cellForRow(at: indexPath) as! PlayerTableViewCell
                 let item = fetchedResultController.object(at: indexPath)
@@ -279,6 +181,8 @@ extension MainViewController: NSFetchedResultsControllerDelegate {
         playersTableView.endUpdates()
     }
 }
+
+// MARK: - SearchDelegate
 
 extension MainViewController: SearchDelegate {
     func viewController(_ viewController: UIViewController, didPassedData predicate: NSCompoundPredicate) {

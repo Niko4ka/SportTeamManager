@@ -101,7 +101,6 @@ final class CoreDataManager {
         }
         
         let predicate = NSPredicate(format: "id = '\(id)'")
-        print("Predicate - \(predicate)")
         request.predicate = predicate
         
         do {

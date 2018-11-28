@@ -11,11 +11,13 @@ import CoreData
 
 class PlayerViewController: UIViewController {
     
+    // PickerViews DataSource
     struct PickerViewItems {
         static let positions = ["Centre", "Power forward", "Small forward", "Shooting guard", "Point guard", "Coach"]
         static let teams = ["Chicago Bulls", "Los Angeles Lakers", "Boston Celtics", "Golden State Warriors", "San Antonio Spurs", "Toronto Raptors"]
     }
     
+    // Outlets
     @IBOutlet weak var photoImageView: UIImageView!
     @IBOutlet weak var numberTextField: UITextField!
     @IBOutlet weak var nameTextField: UITextField!
@@ -26,14 +28,13 @@ class PlayerViewController: UIViewController {
     @IBOutlet weak var saveButton: UIButton!
     @IBOutlet weak var segmentedControl: UISegmentedControl!
     
-
-    private var imagePickerController = UIImagePickerController()
-    private var keyboardService: KeyboardService!
-    private let hiddenTextField = UITextField(frame: .zero)
-    private let pickerView = UIPickerView()
-    private var selectedTeam: String!
-    private var selectedPosition: String!
-    
+    // Variables
+    var imagePickerController = UIImagePickerController()
+    var keyboardService: KeyboardService!
+    let hiddenTextField = UITextField(frame: .zero)
+    let pickerView = UIPickerView()
+    var selectedTeam: String!
+    var selectedPosition: String!
     public var editingPlayer: EditingPlayer?
 
     override func viewDidLoad() {
@@ -89,6 +90,8 @@ class PlayerViewController: UIViewController {
         
         enableSaveButton()
     }
+    
+    // MARK: - Actions
     
     @IBAction func uploadImageButtonPressed(_ sender: UIButton) {
         
@@ -173,12 +176,14 @@ class PlayerViewController: UIViewController {
         navigationController?.popViewController(animated: true)
     }
     
+    // MARK: - Enable/Disable Save-button
+    
     private func disableSaveButton() {
         saveButton.isEnabled = false
         saveButton.alpha = 0.5
     }
     
-    private func enableSaveButton() {
+    internal func enableSaveButton() {
         guard let fullname = nameTextField.text, let age = ageTextField.text, let _ = selectedTeam, let _ = selectedPosition else {
             return
         }
@@ -189,99 +194,12 @@ class PlayerViewController: UIViewController {
         }
     }
     
-    func showAlert(with message: String) {
+    // MARK: - Show alert
+    
+    private func showAlert(with message: String) {
         let alertController = UIAlertController(title: message, message: nil, preferredStyle: .alert)
         let action = UIAlertAction(title: "OK", style: .default, handler: nil)
         alertController.addAction(action)
         present(alertController, animated: true, completion: nil)
-    }
-}
-
-extension PlayerViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-    
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        
-        guard let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage else {
-            return
-        }
-        
-        photoImageView.image = image
-        
-        defer {
-            imagePickerController.dismiss(animated: true, completion: nil)
-        }
-    }
-}
-
-extension PlayerViewController: UIPickerViewDelegate, UIPickerViewDataSource {
-    
-    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        switch pickerView.tag {
-        case 0:
-            selectTeamButton.setTitle(PickerViewItems.teams[row], for: .normal)
-            selectedTeam = PickerViewItems.teams[row]
-        case 1:
-            selectPositionButton.setTitle(PickerViewItems.positions[row], for: .normal)
-            selectedPosition = PickerViewItems.positions[row]
-        default:
-            ()
-        }
-        
-        hiddenTextField.resignFirstResponder()
-        enableSaveButton()
-    }
-    
-    func numberOfComponents(in pickerView: UIPickerView) -> Int {
-        return 1
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        switch pickerView.tag {
-        case 0:
-            return PickerViewItems.teams.count
-        case 1:
-            return PickerViewItems.positions.count
-        default:
-            ()
-        }
-        return 0
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        switch pickerView.tag {
-        case 0:
-            return PickerViewItems.teams[row]
-        case 1:
-            return PickerViewItems.positions[row]
-        default:
-            ()
-        }
-        return nil
-    }
-}
-
-extension PlayerViewController: UITextFieldDelegate {
-    
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
-        return true
-    }
-    
-    func textFieldDidBeginEditing(_ textField: UITextField) {
-        keyboardService.textFieldRealYPosition = textField.frame.maxY + textField.frame.height
-    }
-    
-    func textFieldDidEndEditing(_ textField: UITextField) {
-        if textField.placeholder == "Name" {
-            enableSaveButton()
-        }
-    }
-    
-    @objc func tapOutsideTextField(gesture: UITapGestureRecognizer) {
-        nameTextField.resignFirstResponder()
-        numberTextField.resignFirstResponder()
-        nationalityTextField.resignFirstResponder()
-        ageTextField.resignFirstResponder()
-        hiddenTextField.resignFirstResponder()
     }
 }

@@ -23,6 +23,9 @@
 		4ED0283321AAF2C600094EAF /* SearchViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4ED0283121AAF2C600094EAF /* SearchViewController.xib */; };
 		4ED0283521AAF97C00094EAF /* RoundedCornerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED0283421AAF97C00094EAF /* RoundedCornerView.swift */; };
 		4ED0283721ADCBED00094EAF /* EditingPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED0283621ADCBED00094EAF /* EditingPlayer.swift */; };
+		4ED0284021AE25E600094EAF /* MainViewController+TableViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED0283F21AE25E600094EAF /* MainViewController+TableViewDelegate.swift */; };
+		4ED0284221AE27AD00094EAF /* MainViewController+TableViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED0284121AE27AD00094EAF /* MainViewController+TableViewDataSource.swift */; };
+		4ED0284421AEACE200094EAF /* PlayerViewController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED0284321AEACE200094EAF /* PlayerViewController+Extensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -44,6 +47,9 @@
 		4ED0283121AAF2C600094EAF /* SearchViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = SearchViewController.xib; path = SportTeamManager/Controllers/SearchController/SearchViewController.xib; sourceTree = SOURCE_ROOT; };
 		4ED0283421AAF97C00094EAF /* RoundedCornerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedCornerView.swift; sourceTree = "<group>"; };
 		4ED0283621ADCBED00094EAF /* EditingPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditingPlayer.swift; sourceTree = "<group>"; };
+		4ED0283F21AE25E600094EAF /* MainViewController+TableViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MainViewController+TableViewDelegate.swift"; sourceTree = "<group>"; };
+		4ED0284121AE27AD00094EAF /* MainViewController+TableViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MainViewController+TableViewDataSource.swift"; sourceTree = "<group>"; };
+		4ED0284321AEACE200094EAF /* PlayerViewController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PlayerViewController+Extensions.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -113,6 +119,8 @@
 			isa = PBXGroup;
 			children = (
 				4ED0280B21A328C700094EAF /* MainViewController.swift */,
+				4ED0283F21AE25E600094EAF /* MainViewController+TableViewDelegate.swift */,
+				4ED0284121AE27AD00094EAF /* MainViewController+TableViewDataSource.swift */,
 				4ED0280D21A328C700094EAF /* MainViewController.storyboard */,
 				4ED0282621A33E7500094EAF /* PlayerTableViewCell.swift */,
 			);
@@ -123,6 +131,7 @@
 			isa = PBXGroup;
 			children = (
 				4ED0282221A338B100094EAF /* PlayerViewController.swift */,
+				4ED0284321AEACE200094EAF /* PlayerViewController+Extensions.swift */,
 				4ED0282421A338E900094EAF /* PlayerViewController.storyboard */,
 			);
 			path = PlayerController;
@@ -215,11 +224,14 @@
 				4ED0280C21A328C700094EAF /* MainViewController.swift in Sources */,
 				4ED0282F21A6EE4A00094EAF /* KeyboardService.swift in Sources */,
 				4ED0283221AAF2C600094EAF /* SearchViewController.swift in Sources */,
+				4ED0284421AEACE200094EAF /* PlayerViewController+Extensions.swift in Sources */,
 				4ED0282D21A4A86400094EAF /* PresetData.swift in Sources */,
 				4ED0283521AAF97C00094EAF /* RoundedCornerView.swift in Sources */,
+				4ED0284021AE25E600094EAF /* MainViewController+TableViewDelegate.swift in Sources */,
 				4ED0282021A32A5400094EAF /* CoreDataManager.swift in Sources */,
 				4ED0281221A328C700094EAF /* SportTeam.xcdatamodeld in Sources */,
 				4ED0280A21A328C700094EAF /* AppDelegate.swift in Sources */,
+				4ED0284221AE27AD00094EAF /* MainViewController+TableViewDataSource.swift in Sources */,
 				4ED0282321A338B100094EAF /* PlayerViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
